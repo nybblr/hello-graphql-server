@@ -4,19 +4,28 @@ const {
   GraphQLString
 } = require('graphql');
 
-let schema = new GraphQLSchema({
-  query: new GraphQLObjectType({
-    name: 'RootQueryType',
-    fields: {
-      hello: {
-        type: GraphQLString,
-        resolve(parent, args, ctx) {
-          console.log(parent, args, ctx);
-          return 'world';
-        }
-      }
+let UserType = new GraphQLObjectType({
+  name: 'UserType',
+  fields: {
+    userId: {
+      type: GraphQLString,
+      resolve: user => user.userId
+    },
+  }
+});
+
+let RootQueryType = new GraphQLObjectType({
+  name: 'RootQueryType',
+  fields: {
+    me: {
+      type: UserType,
+      resolve: (parent, args, ctx) => ctx.user
     }
-  })
+  }
+});
+
+let schema = new GraphQLSchema({
+  query: RootQueryType
 });
 
 module.exports = schema;
