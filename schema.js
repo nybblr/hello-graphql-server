@@ -1,31 +1,19 @@
 const {
-  GraphQLSchema,
-  GraphQLObjectType,
-  GraphQLString
+  buildSchema,
 } = require('graphql');
 
-let UserType = new GraphQLObjectType({
-  name: 'UserType',
-  fields: {
-    userId: {
-      type: GraphQLString,
-      resolve: user => user.userId
-    },
+let schema = buildSchema(`
+  type Query {
+    me: UserType
   }
-});
 
-let RootQueryType = new GraphQLObjectType({
-  name: 'RootQueryType',
-  fields: {
-    me: {
-      type: UserType,
-      resolve: (parent, args, ctx) => ctx.user
-    }
+  type UserType {
+    userId: String
   }
-});
+`);
 
-let schema = new GraphQLSchema({
-  query: RootQueryType
-});
+let rootValue = {
+  me: (parent, ctx) => ctx.user
+};
 
-module.exports = schema;
+module.exports = { schema, rootValue };

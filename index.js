@@ -17,7 +17,7 @@ let app = new Koa();
 let api = Router();
 
 api.post('/graphql', jwtParser, bodyParser,
-  graphql(ctx => ({ schema, context: ctx.state }))
+  graphql(ctx => ({ ...schema, context: ctx.state }))
 );
 api.get('/graphiql', graphiql({ endpointURL: '/graphql' }));
 
