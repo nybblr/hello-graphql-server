@@ -1,8 +1,6 @@
-const {
-  buildSchema,
-} = require('graphql');
+const { makeExecutableSchema } = require('graphql-tools');
 
-let schema = buildSchema(`
+let typeDefs = `
   type Query {
     me: UserType
   }
@@ -10,10 +8,17 @@ let schema = buildSchema(`
   type UserType {
     userId: String
   }
-`);
+`;
 
-let rootValue = {
-  me: (parent, ctx) => ctx.user
+let resolvers = {
+  Query: {
+    me: (parent, args, ctx) => ctx.user
+  }
 };
 
-module.exports = { schema, rootValue };
+let schema = makeExecutableSchema({
+  typeDefs,
+  resolvers,
+});
+
+module.exports = schema;
