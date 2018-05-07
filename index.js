@@ -6,11 +6,13 @@ const {
   graphiqlKoa: graphiql,
 } = require('apollo-server-koa');
 
+const schema = require('./schema');
+
 let app = new Koa();
 let api = Router();
 
-api.post('/graphql', bodyParser(), async (ctx) => console.log(ctx.request.body));
-api.get('/graphiql', async (ctx) => ctx.body = 'GraphiQL');
+api.post('/graphql', bodyParser(), graphql({ schema }));
+api.get('/graphiql', graphiql({ endpointURL: '/graphql' }));
 
 app.use(api.routes());
 app.use(api.allowedMethods());
